@@ -1,97 +1,81 @@
-import userstore, { User } from '../models/user';
-import productstore, { product } from '../models/products';
-import store, { Order } from '../models/order';
-import Client from '../database/database';
+import products from './../models/products';
+
+import users, { User } from '../models/user';
+import orders, { Order } from '../models/order';
+import user from '../models/user';
+
 
 
 describe('Order Model methods definition', () => {
   it('Should have an INDEX method', () => {
-    expect(store.getAllOrdersByUserId).toBeDefined();
+    expect(orders.getAllOrdersByUserId).toBeDefined();
   });
 
   it('Should have a GET CURRENT ORDER method', () => {
-    expect(store.getActiveOrder).toBeDefined();
+    expect(orders.getActiveOrder).toBeDefined();
   });
 
   it('Should have a GET COMPLETED ORDERS method', () => {
-    expect(store.getCompletedOrders).toBeDefined();
+    expect(orders.getCompletedOrders).toBeDefined();
   });
 
   it('Should have an ADD-PRODUCT method', () => {
-    expect(store.addProduct).toBeDefined();
+    expect(orders.addProduct).toBeDefined();
   });
 });
+
 
 describe('Order Model methods logic', () => {
-  const user: User = {
-    email: 'hadir@gmail.com',
-    first_name: 'Hadir',
-    last_name: 'Wahid',
-    password: '00000'
-  };
+    it('Should create an order', async () => {
+      const user = await users.create({
+        first_name: 'krkr',
+        last_name: 'sameh',
+        email: 'kero@58',
+        password: "1125652"
+      });
+      const Order = await orders.create({
+        user_id: user.id as string,
+        status: 'active'
+      });
+        expect(Order.user_id).toBe('2');
+    } )
+    it('Should return all orders', async () => {
+        const order = await orders.getAllOrdersByUserId(2);
+        expect(order.map(e=>{
+            return e.user_id
+        })).toContain('2');
+    })
+    it('Should return an active order', async () => {
+        const order = await orders.getActiveOrder(2);
+        expect(order.status).toBe('active');
+    } )
+    it('Should return all completed orders', async () => {
+        const order = await orders.getCompletedOrders(2);
+        expect(order.length).toBe(0);
+    } )
+    it('Should add a product to an order', async () => {
+        const product = await products.create({
+            title: 'product',
+            description: 'description',
+            price: 50,
+            quantity: 10
+        });
+        const order = await orders.addProduct(2,1, product.id as string);
+        expect(order.quantity).toBe(2);
+    } )
 
-  const product: product = {
-    title: 'lipstick',
-    price: 10,
-    description: 'red lipstick',
-    quantity: 5
-  };
+    it('should update an order', async () => {
+        const order = await orders.update(1, {
+            id: 2,
+            user_id: '2',
+            status: 'completed'
+        });
+        expect(order.status).toBe('completed');
+    } )
 
-  const order1: Order = {
-    status: 'active',
-    user_id: 1
-  };
-
-  const order2: Order = {
-    status: 'complete',
-    user_id: 1
-  };
-
-  beforeAll(async () => {
-    await userstore.create(user);
-    await productstore.create(product);
-    await store.create(order1);
-    await store.create(order2);
-  });
-
-  afterAll(async () => {
-    const connect = await Client.connect();
-    const sql =
-      'ALTER SEQUENCE users_id_seq RESTART WITH 1;\n ALTER SEQUENCE products_id_seq RESTART WITH 1;\n ALTER SEQUENCE orders_id_seq RESTART WITH 1;\n ALTER SEQUENCE products_id_seq RESTART WITH 1;\n ALTER SEQUENCE order_products_id_seq RESTART WITH 1;\n DELETE FROM order_products;\n DELETE FROM orders;\n DELETE FROM products;\n DELETE FROM users;';
-    await connect.query(sql);
-    connect.release();
-  });
-
-  it('INDEX method should return all orders by user along with the user id', async () => {
-    const result = await store.getAllOrdersByUserId(1);
-    expect(result[0].id).toEqual(1);
-    expect(result[0].user_id).toEqual('1');
-    expect(result[0].status).toEqual('active');
-    expect(result[1].id).toEqual(2);
-    expect(result[1].user_id).toEqual('1');
-    expect(result[1].status).toEqual('complete');
-    expect(result.length).toEqual(2);
-  });
-
-  it('GET CURRENT ORDER method should return current order by user along with the user id', async () => {
-    const result = await store.getActiveOrder(1);
-    expect(result.id).toEqual(1);
-    expect(result.user_id).toEqual('1');
-    expect(result.status).toEqual('active');
-  });
-
-  it('GET COMPLETED ORDERS method should return completed orders by user along with the user id', async () => {
-    const result = await store.getCompletedOrders(1);
-    expect(result[0].id).toEqual(2);
-    expect(result[0].user_id).toEqual('1');
-    expect(result[0].status).toEqual('complete');
-    expect(result.length).toEqual(1);
-  });
-
-  it('ADD-PRODUCT method should return a product data of a specific id', async () => {
-    const result = await store.addProduct(5, 1, 1);
-    expect(result.quantity).toEqual(5);
-    expect(result.product_id).toEqual('1');
-    expect(result.order_id).toEqual('1');
-  });
-});
+    it('should delete an order', async () => {
+        const order = await orders.delete(2);
+        expect(order).toBeUndefined()
+    }
+    )
+})

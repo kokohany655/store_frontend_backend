@@ -6,24 +6,29 @@ export type Order = {
   status: string;
   user_id: number | string;
 };
-
-export type order_products = {
+export type OrderProduct = {
+  id?: number | string;
   order_id: number | string;
   product_id: number | string;
   quantity: number;
-};
+}
 
 class OrderModel {
 
   async create(o: Order): Promise<Order> {
     try {
       const connect = await db.connect();
+      if(await User.getById(o.user_id)){
         const sql =
         'INSERT INTO orders (status, user_id) VALUES($1, $2) RETURNING id, status, user_id';
       const result = await connect.query(sql, [o.status, o.user_id]);
       const order = result.rows[0];
       connect.release();
       return order;
+      }else{
+        throw new Error(`User ${o.user_id} does not exist.`);
+      }
+      
     } catch (err) {
       throw new Error(`Could not create order. Error: ${err as Error}`);
     }
@@ -68,7 +73,7 @@ class OrderModel {
     }
   }
   // ADD PRODUCT method: adds a product to an order
-  async addProduct(quantity: number,order_id: number | string,product_id: number | string): Promise<order_products> {
+  async addProduct(quantity: number,order_id: number | string,product_id: number | string): Promise<OrderProduct> {
     try {
       const connect = await db.connect();
       const sql =

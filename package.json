@@ -8,7 +8,7 @@
     "migrate:up": "npx db-migrate up",
     "format": "prettier --write src//**/*.{ts,js}",
     "build": "tsc",
-    "test": "set NODE_ENV=test && npm run build && npx db-migrate --env test up  && jasmine && npx db-migrate --env test down",
+    "test": "set NODE_ENV=test && npm run build && npx db-migrate --env test up  && jasmine && npx db-migrate --env test reset",
     "lint": "eslint src/**/*.{ts,js}"
   },
   "devDependencies": {

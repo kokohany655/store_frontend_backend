@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 process.env.NODE_ENV = 'test';
 import UserModel from '../models/user';
+import db from '../database/database';
 
 
 
@@ -44,7 +45,6 @@ describe('User Model methods', () => {
     });
     expect(user.first_name).toBe('krkr');
   })
-
   it('Should return all users', async () => {
     const users = await UserModel.getAll();
     expect(users.length).toBe(1);
@@ -74,6 +74,6 @@ describe('User Model methods', () => {
     const user = await UserModel.delete(1);
     expect(user.id).toBe(1);
   })
-})
 
+})
 
