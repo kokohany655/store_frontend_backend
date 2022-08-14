@@ -1,7 +1,7 @@
 import { Request ,Response , NextFunction } from "express";
-import Error from "../interfaces/errorInterface";
+import Error from "../interfaces/errorInterface"
 
-export const GlobalError = (err:Error,req:Request,res:Response,next:NextFunction):void=>{
+export const GlobalError =(err:Error,req:Request,res:Response,next:NextFunction):void=>{
     err.statusCode = err.statusCode || 500 ;
     err.status = err.status || 'error'
     res.status(err.statusCode).json({

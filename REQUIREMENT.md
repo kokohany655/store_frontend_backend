@@ -4,88 +4,88 @@
 ## 1-Users:
 
 - CREATE route:
-  - `api/users`
+  - `api/v1/users`
   - Method: POST
 
 - AUTHENTICATE route:
-  - `api/users/authenticate`
+  - `api/v1/users/authenticate`
   - Method: POST
 
 - GEt All route (Token Required):
-  - `api/users`
+  - `api/v1/users`
   - Method: GET
 
 - GEt Uer by id route (Token Required):
-  - `api/users/:id`
+  - `api/v1/users/:id`
   - Method: GET
   - Args: user_id
 
 - UPDATE route (Token Required):
-  - `api/users/:id`
+  - `api/v1/users/:id`
   - Method: PUT
   - Args: user_id
 
 - DELETE route (Token Required):
-  - `api/users/:id`
+  - `api/v1/users/:id`
   - Method: DELETE
   - Args: user_id
 
 ## 2-Products:
 
 - GET ALL route:
-  - `api/products`
+  - `api/v1/products`
   - Method: GET
 
 - GET BY ID route:
-  - `api/products/:id`
+  - `api/v1/products/:id`
   - Method: GET
   - Args: category
 
 
 - CREATE route (Token Required): 
-  - `api/products`
+  - `api/v1/products`
   - Method: POST
 
 - UPDATE route (Token Required):
-    - `api/products/:id`
+    - `api/products/v1/:id`
     - Method: PUT
     - Args: product_id
 
 - DELETE route (Token Required):
-    - `api/products/:id`
+    - `api/v1/products/:id`
     - Method: DELETE
     - Args: product_id
 
 ## 3-Orders:
 
 - INDEX route (Token Required):
-  - `api/orders/:id`
+  - `api/v1/orders/:id`
   - Method: GET
   - Args: user_id
 
 - GET CURRENT ORDER route (Token Required):
-  - `api/orders/:id/Active`
+  - `api/v1/orders/:id/Active`
   - Method: GET
   - Args: user_id
 
 - GET COMPLETED ORDERS route (Token Required):
-  - `api/orders/:id/completed`
+  - `api/v1/orders/:id/completed`
   - Method: GET
   - Args: user_id
 
 - ADD PRODUCTS route (Token Required):
   - (allows the users to add a product to an order so that they can view it in a cart)
-  - `api/orders/:id/addproduct`
+  - `api/v1/orders/:id/addproduct`
   - Method: GET
   - Args: product_id
 
 - UPDATE ORDER route (Token Required):
-  - `api/orders/:id`
+  - `api/v1/orders/:id`
   - Method: PUT
   - Args: order_id
 
 - DELETE ORDER route (Token Required):
-    - `api/orders/:id`
+    - `api/v1/orders/:id`
     - Method: DELETE
     - Args: order_id
 

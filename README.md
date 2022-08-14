@@ -73,3 +73,7 @@ orders
 * SALT_ROUNDS=
 * BCRIPT_SECRET=
 * TOKEN_SECRET=
+
+# Create DataBase For TESTing And DEVELOPMENT
+    * create database store_dev : we using that for development
+    * create database store_test : we using that for testing
